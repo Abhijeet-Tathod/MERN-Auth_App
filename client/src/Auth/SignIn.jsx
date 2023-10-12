@@ -1,5 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { useFormik } from "formik";
+import * as Yup from "yup";
+import Axios from "axios";
 
 import { PersonAdd } from "@mui/icons-material";
 import {
@@ -7,6 +10,8 @@ import {
   Button,
   Container,
   CssBaseline,
+  FormControl,
+  FormHelperText,
   Grid,
   Paper,
   TextField,
@@ -18,6 +23,56 @@ import {
 export default function SignIn() {
   const defaultTheme = createTheme();
 
+  const validationSchema = Yup.object().shape({
+    email: Yup.string().email("Invalid email").required("Email is required"),
+    password: Yup.string("Invalid Password")
+      .matches(
+        /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).{8,}$/,
+        "Password must be at least 8 characters long, contain at least one lowercase letter, one uppercase letter, one digit, and one special character."
+      )
+      .required("Password is required"),
+  });
+  const apiUrl = process.env.REACT_APP_API_URL;
+  const formik = useFormik({
+    initialValues: {
+      email: "",
+      password: "",
+    },
+    validationSchema: validationSchema,
+    onSubmit: async (values) => {
+      // console.log(values);
+      try {
+        const response = await Axios.post(`${apiUrl}/signin`, values);
+        formik.resetForm();
+        console.log("Response : ", response);
+      } catch (error) {
+        console.log("Error", error);
+      }
+    },
+  });
+  const handleInputChange = (e) => {
+    e.preventDefault();
+    const { name, value } = e.target;
+    formik.setValues({ ...formik.values, [name]: value });
+  };
+
+  const renderTextField = (name, label, type) => (
+    <FormControl fullWidth>
+      <TextField
+        id={name}
+        name={name}
+        type={type}
+        value={formik.values[name]}
+        onChange={handleInputChange}
+        label={label}
+      />
+      {formik.errors[name] ? (
+        <FormHelperText style={{ color: "red" }}>
+          {formik.errors[name]}
+        </FormHelperText>
+      ) : null}
+    </FormControl>
+  );
   return (
     <>
       <ThemeProvider theme={defaultTheme}>
@@ -54,13 +109,8 @@ export default function SignIn() {
               elevation={6}
               square
             >
-              <Box
-                component="form"
-                noValidate
-                //   onSubmit={handleSubmit}
-                sx={{ mt: 3 }}
-              >
-                <div className="mt-12 flex flex-col items-center">
+              <Box noValidate sx={{ mt: 3 }}>
+                <div className="flex flex-col items-center">
                   <h1 className="text-2xl xl:text-3xl font-extrabold">
                     Sign In
                   </h1>
@@ -110,11 +160,8 @@ export default function SignIn() {
                     Or Sign In with Email
                   </div>
                 </div>
-                <Box
-                  // component="form"
-                  noValidate
-                  //   onSubmit={handleSubmit}
-                >
+
+                <Box component="form" noValidate>
                   <Grid container sx={{ width: "330px", margin: "auto" }}>
                     <Grid
                       item
@@ -123,13 +170,7 @@ export default function SignIn() {
                       paddingBottom={2}
                       paddingInline={1}
                     >
-                      <TextField
-                        fullWidth
-                        id="email"
-                        label="Email"
-                        name="email"
-                        autoComplete="email"
-                      />
+                      {renderTextField("email", "Email", "email")}
                     </Grid>
                     <Grid
                       item
@@ -138,15 +179,7 @@ export default function SignIn() {
                       paddingBottom={2}
                       paddingInline={1}
                     >
-                      <TextField
-                        required
-                        fullWidth
-                        name="password"
-                        label="Password"
-                        type="password"
-                        id="password"
-                        autoComplete="new-password"
-                      />
+                      {renderTextField("password", "Password", "password")}
                     </Grid>
                     <Grid
                       item
@@ -159,6 +192,10 @@ export default function SignIn() {
                         fullWidth
                         type="submit"
                         variant="contained"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          formik.handleSubmit();
+                        }}
                         sx={{
                           marginTop: "1.25rem",
                           letterSpacing: "0.05em",
