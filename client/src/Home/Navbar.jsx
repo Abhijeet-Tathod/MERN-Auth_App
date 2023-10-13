@@ -103,7 +103,7 @@ const Navbar = () => {
             {list("left")}
           </SwipeableDrawer>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            News
+            Personal Manager
           </Typography>
           <Button
             color="inherit"

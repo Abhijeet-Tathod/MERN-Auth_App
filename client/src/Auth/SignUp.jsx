@@ -39,6 +39,8 @@ export default function SignUp() {
       password: "",
     },
     validationSchema: validationSchema,
+    validateOnChange: false,
+    validateOnBlur: true,
     onSubmit: async (values) => {
       // console.log(values);
       try {
@@ -108,8 +110,9 @@ export default function SignUp() {
               component={Paper}
               elevation={6}
               square
+              className="flex items-center justify-center"
             >
-              <Box noValidate sx={{ mt: 3 }}>
+              <Box noValidate>
                 <div className="flex flex-col items-center">
                   <h1 className="text-2xl xl:text-3xl font-extrabold">
                     Sign Up
