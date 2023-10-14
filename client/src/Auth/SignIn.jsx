@@ -44,7 +44,7 @@ export default function SignIn() {
     onSubmit: async (values) => {
       // console.log(values);
       try {
-        const response = await Axios.post(`${apiUrl}/signin`, values);
+        const response = await Axios.post(`${apiUrl}/api/auth/signin`, values);
         formik.resetForm();
         console.log("Response : ", response);
       } catch (error) {
@@ -216,7 +216,7 @@ export default function SignIn() {
                         }}
                       >
                         <PersonAdd fontSize="medium" className="mr-3" />
-                        <Typography sx={{ fontSize: "18px", marginTop: "5px" }}>
+                        <Typography sx={{ fontSize: "18px", marginTop: "3px" }}>
                           Sign In
                         </Typography>{" "}
                       </Button>
