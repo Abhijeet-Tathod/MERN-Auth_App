@@ -16,7 +16,7 @@ const connect = async () => {
 };
 
 // enabling debug mode
-mongoose.set("debug", true);
+// mongoose.set("debug", true);
 
 // module.exports = connect;
 export default connect;
