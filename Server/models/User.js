@@ -12,7 +12,7 @@ const userInfoSchema = new mongoose.Schema(
     },
     mobileNumber: {
       type: String,
-      // unique: true,
+      unique: true,
     },
     password: {
       type: String,
@@ -30,8 +30,8 @@ const userInfoSchema = new mongoose.Schema(
       type: Date,
       default: null,
     },
-  }
-  // { timestamps: true }
+  },
+  { timestamps: true }
 );
 
 const UserInfo = mongoose.model("UserInfo", userInfoSchema);

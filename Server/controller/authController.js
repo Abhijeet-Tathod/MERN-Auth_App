@@ -6,13 +6,14 @@ const signUp = async (req, res) => {
 
   try {
     const existingUser = await User.findOne({ email });
-    if (existingUser) {
-      return res.status(409).json({ message: "Email already in use" });
-    }
 
     const hashedPassword = await bcryptjs.hash(password, 10);
 
-    const newUser = new User({ email, password: hashedPassword });
+    const newUser = new User({
+      email,
+      password: hashedPassword,
+      mobileNumber: email,
+    });
 
     await newUser.save();
 

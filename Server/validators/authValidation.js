@@ -10,13 +10,13 @@ const signUpValidator = [
     .isEmail()
     .withMessage("Invalid email")
     .bail()
-    // .custom(async () => {
-    //   const user = await User.findOne({ email });
-    //   if (user) {
-    //     throw new Error("Email Already used");
-    //   }
-    // })
-    ,
+    .custom(async () => {
+      const user = await User.findOne({ email });
+      if (user) {
+        throw new Error("Email Already used");
+      }
+      return true
+    }),
   body("password")
     .notEmpty()
     .trim()
