@@ -1,5 +1,5 @@
 import { body, param, query } from "express-validator";
-import User from "../models/User.js";
+import User from "../models/authUser.js";
 import mongoose from "mongoose";
 
 const signUpValidator = [
@@ -10,18 +10,20 @@ const signUpValidator = [
     .isEmail()
     .withMessage("Invalid email")
     .bail()
-    .custom(async () => {
-      const user = await User.findOne({ email });
+    .custom(async (value, { req }) => {
+      const user = await User.findOne({ email: value });
       if (user) {
-        throw new Error("Email Already used");
+        throw new Error("User already exists");
       }
-      return true
     }),
   body("password")
     .notEmpty()
     .trim()
     .escape()
-    .withMessage("Password is required"),
+    .isLength({ min: 8 })
+    .withMessage("Password must be at least 8 characters long")
+    .isLength({ max: 255 })
+    .withMessage("Password is too long"),
 ];
 
 const SigInValidator = [
@@ -35,7 +37,10 @@ const SigInValidator = [
     .notEmpty()
     .trim()
     .escape()
-    .withMessage("Password is required"),
+    .isLength({ min: 8 })
+    .withMessage("Password must be at least 8 characters long")
+    .isLength({ max: 255 })
+    .withMessage("Password is too long"),
 ];
 
 export { signUpValidator, SigInValidator };

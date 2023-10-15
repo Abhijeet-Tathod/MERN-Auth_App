@@ -2,9 +2,16 @@ import { validationResult } from "express-validator";
 
 const validationErrorHandler = (req, res, next) => {
   const errors = validationResult(req);
-  console.log(errors)
   if (!errors.isEmpty()) {
-    return res.status(400).json({ errors: errors.array() });
+    const errorMessages = errors.array().map((error) => error.msg);
+    const statusCode =errors.statusCode || 400;
+    const message = "Validation Error";
+
+    return res.status(statusCode).json({
+      success: false,
+      message,
+      errors: errorMessages,
+    });
   }
   next();
 };

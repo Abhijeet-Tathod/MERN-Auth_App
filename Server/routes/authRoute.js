@@ -6,6 +6,7 @@ import {
   SigInValidator,
   signUpValidator,
 } from "../validators/authValidation.js";
+
 import validationErrorHandler from "../middleware/errorHandler.js";
 
 router.post("/signup", signUpValidator, validationErrorHandler, signUp);
