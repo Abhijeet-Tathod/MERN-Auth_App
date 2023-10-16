@@ -5,7 +5,7 @@ dotenv.config();
 const PORT = process.env.PORT || 4000;
 import connection from "./config/database.js";
 import authRoute from "./routes/authRoute.js";
-import cors from 'cors';
+import cors from "cors";
 
 //MogoDB Connection
 connection();
