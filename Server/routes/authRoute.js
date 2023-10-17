@@ -3,13 +3,12 @@ const router = Router();
 
 import { signIn, signUp } from "../controller/authController.js";
 import {
-  SigInValidator,
-  signUpValidator,
+  authVaildator,
 } from "../validators/authValidation.js";
 
 import validationErrorHandler from "../middleware/errorHandler.js";
 
-router.post("/signup", signUpValidator, validationErrorHandler, signUp);
-router.post("/signin", SigInValidator, validationErrorHandler, signIn);
+router.post("/signup", authVaildator, validationErrorHandler, signUp);
+router.post("/signin", authVaildator, validationErrorHandler, signIn);
 
 export default router;

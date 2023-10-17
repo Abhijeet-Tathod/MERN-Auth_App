@@ -18,9 +18,9 @@ const signUp = async (req, res, next) => {
 
     await newUser.save();
 
-    res.status(201).json({ message: "User Added Successfully" });
+    res.status(201).json({ success: true, message: "User Added Successfully" });
   } catch (error) {
-    res.status(500).json({ message: "Internal Server Error" });
+    res.status(500).json({ success: false, message: "Internal Server Error" });
   }
 };
 
@@ -29,11 +29,16 @@ const signIn = async (req, res, next) => {
 
   try {
     const user = await UserAuthInfo.findOne({ email });
-    if (!user) return res.status(401).json({ message: "Invalid credentials" });
+    if (!user)
+      return res
+        .status(401)
+        .json({ success: false, message: "Invalid credentials" });
 
     const isPasswordValid = await bcryptjs.compare(password, user.password);
     if (!isPasswordValid)
-      return res.status(401).json({ message: "Invalid credentials" });
+      return res
+        .status(401)
+        .json({ success: false, message: "Invalid credentials" });
 
     const expiryDate = new Date();
     expiryDate.setHours(expiryDate.getDay() + 1);
@@ -52,9 +57,13 @@ const signIn = async (req, res, next) => {
         expires: expiryDate,
       })
       .status(200)
-      .json(userWithoutPassword);
+      .json({
+        success: true,
+        message: "Login Successful",
+        user: userWithoutPassword,
+      });
   } catch (error) {
-    res.status(500).json({ message: "Internal Server Error" });
+    res.status(500).json({ success: false, message: "Internal Server Error" });
   }
 };
 
