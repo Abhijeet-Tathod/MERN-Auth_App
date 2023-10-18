@@ -3,11 +3,11 @@ import { Link } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import Axios from "axios";
-
 import { PersonAdd } from "@mui/icons-material";
 import {
   Box,
   Button,
+  CircularProgress,
   Container,
   CssBaseline,
   FormControl,
@@ -20,7 +20,17 @@ import {
   createTheme,
 } from "@mui/material";
 
+import {
+  signInStart,
+  signInFailure,
+  signInSuccess,
+} from "../store/Slices/UserInfoSlice";
+import { useDispatch, useSelector } from "react-redux";
+
 export default function SignIn() {
+  const dispatch = useDispatch();
+  const { loading, error } = useSelector((state) => state.UserInfo);
+
   const defaultTheme = createTheme();
 
   const validationSchema = Yup.object().shape({
@@ -42,13 +52,17 @@ export default function SignIn() {
     validateOnChange: false,
     validateOnBlur: true,
     onSubmit: async (values) => {
-      // console.log(values);
       try {
+        dispatch(signInStart());
         const response = await Axios.post(`${apiUrl}/api/auth/signin`, values);
+        if (response.success === false)
+          return dispatch(signInFailure(response.data));
+        dispatch(signInSuccess(response.data.user));
         formik.resetForm();
-        console.log("Response : ", response);
+        // console.log("Response : ", response);
       } catch (error) {
-        console.log("Error", error);
+        dispatch(signInFailure(error));
+        // console.log("Error", error);
       }
     },
   });
@@ -165,7 +179,7 @@ export default function SignIn() {
                 </div>
 
                 <Box component="form" noValidate>
-                  <Grid container sx={{ width: "330px", margin: "auto" }}>
+                  <Grid container sx={{ width: "330px", margin: "auto" }} className="flex justify-center">
                     <Grid
                       item
                       xs={12}
@@ -184,6 +198,9 @@ export default function SignIn() {
                     >
                       {renderTextField("password", "Password", "password")}
                     </Grid>
+                    <Typography sx={{ color: "red", textAlign: "center" }}>
+                      {error ? "Invalid Credentials" : ""}
+                    </Typography>
                     <Grid
                       item
                       xs={12}
@@ -199,6 +216,7 @@ export default function SignIn() {
                           e.preventDefault();
                           formik.handleSubmit();
                         }}
+                        // disabled={loading}
                         sx={{
                           marginTop: "1.25rem",
                           letterSpacing: "0.05em",
@@ -215,10 +233,18 @@ export default function SignIn() {
                           boxShadow: "0 0 0 3px rgba(100, 126, 234, 0.5)",
                         }}
                       >
-                        <PersonAdd fontSize="medium" className="mr-3" />
-                        <Typography sx={{ fontSize: "18px", marginTop: "3px" }}>
-                          Sign In
-                        </Typography>{" "}
+                        {loading ? (
+                          <CircularProgress size={30} color="inherit" />
+                        ) : (
+                          <>
+                            <PersonAdd fontSize="medium" className="mr-3" />
+                            <Typography
+                              sx={{ fontSize: "20px", marginTop: "3px" }}
+                            >
+                              Sign In
+                            </Typography>
+                          </>
+                        )}
                       </Button>
                     </Grid>
                   </Grid>
