@@ -6,6 +6,7 @@ import Home from "./Home/Home";
 import NotFound from "./Home/NotFound";
 
 import { ThemeProvider, createTheme } from "@mui/material/styles";
+import ProfilePage from "./UserProfile/ProfilePage";
 const ColorModeContext = React.createContext({ toggleColorMode: () => {} });
 
 const App = () => {
@@ -37,6 +38,7 @@ const App = () => {
               <Route path="/" element={<Home />} />
               <Route path="/signin" element={<SignIn />} />
               <Route path="/signup" element={<SignUp />} />
+              <Route path="/profilepage" element={<ProfilePage />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>

@@ -57,7 +57,7 @@ export default function SignIn() {
         const response = await Axios.post(`${apiUrl}/api/auth/signin`, values);
         if (response.success === false)
           return dispatch(signInFailure(response.data));
-        dispatch(signInSuccess(response.data.user));
+                dispatch(signInSuccess(response.data.user));
         formik.resetForm();
         // console.log("Response : ", response);
       } catch (error) {
@@ -179,7 +179,11 @@ export default function SignIn() {
                 </div>
 
                 <Box component="form" noValidate>
-                  <Grid container sx={{ width: "330px", margin: "auto" }} className="flex justify-center">
+                  <Grid
+                    container
+                    sx={{ width: "330px", margin: "auto" }}
+                    className="flex justify-center"
+                  >
                     <Grid
                       item
                       xs={12}
