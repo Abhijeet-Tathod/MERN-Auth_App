@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -42,16 +42,17 @@ export default function SignUp() {
     validateOnChange: false,
     validateOnBlur: true,
     onSubmit: async (values) => {
-      // console.log(values);
       try {
         const response = await Axios.post(`${apiUrl}/api/auth/signup`, values);
         formik.resetForm();
         console.log("Response : ", response);
       } catch (error) {
+        setError(error);
         console.log("Error", error);
       }
     },
   });
+  const [error, setError] = useState();
   const handleInputChange = (e) => {
     e.preventDefault();
     const { name, value } = e.target;
@@ -183,6 +184,9 @@ export default function SignUp() {
                     >
                       {renderTextField("password", "Password", "password")}
                     </Grid>
+                    <Typography sx={{ color: "red", textAlign: "center" }}>
+                      {error ? error.message || "Something went wrong" : ""}
+                    </Typography>
                     <Grid
                       item
                       xs={12}

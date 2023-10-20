@@ -203,7 +203,7 @@ export default function SignIn() {
                       {renderTextField("password", "Password", "password")}
                     </Grid>
                     <Typography sx={{ color: "red", textAlign: "center" }}>
-                      {error ? "Invalid Credentials" : ""}
+                      {error ? error.message || "Something went wrong" : ""}
                     </Typography>
                     <Grid
                       item
