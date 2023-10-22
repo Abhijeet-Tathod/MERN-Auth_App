@@ -28,6 +28,17 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 
 export default function SignIn() {
+  const getErrorMessage = (statusCode) => {
+    switch (statusCode) {
+      case 401:
+        return "Invalid credentials";
+      case 404:
+        return "User not found";
+      default:
+        return "An error occurred";
+    }
+  };
+
   const dispatch = useDispatch();
   const { loading, error } = useSelector((state) => state.UserInfo);
 
@@ -62,7 +73,7 @@ export default function SignIn() {
         // console.log("Response : ", response);
       } catch (error) {
         dispatch(signInFailure(error));
-        // console.log("Error", error);
+        console.log("Error", error);
       }
     },
   });
@@ -203,7 +214,11 @@ export default function SignIn() {
                       {renderTextField("password", "Password", "password")}
                     </Grid>
                     <Typography sx={{ color: "red", textAlign: "center" }}>
-                      {error ? error.message || "Something went wrong" : ""}
+                      {error
+                        ? error.response
+                          ? getErrorMessage(error.response.status)
+                          : error.message || "Something went wrong"
+                        : ""}
                     </Typography>
                     <Grid
                       item
@@ -220,7 +235,7 @@ export default function SignIn() {
                           e.preventDefault();
                           formik.handleSubmit();
                         }}
-                        // disabled={loading}
+                        disabled={loading}
                         sx={{
                           marginTop: "1.25rem",
                           letterSpacing: "0.05em",
@@ -238,7 +253,7 @@ export default function SignIn() {
                         }}
                       >
                         {loading ? (
-                          <CircularProgress size={30} color="inherit" />
+                          <CircularProgress size={30} />
                         ) : (
                           <>
                             <PersonAdd fontSize="medium" className="mr-3" />
