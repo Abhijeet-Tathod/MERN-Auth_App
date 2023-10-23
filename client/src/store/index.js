@@ -1,15 +1,24 @@
 // store.js
-import { configureStore } from "@reduxjs/toolkit";
+import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import UserReducer from "./Slices/UserInfoSlice";
+import storage from "redux-persist/lib/storage";
+import { persistStore, persistReducer } from "redux-persist";
 
-const store = configureStore({
-  reducer: {
-    UserInfo: UserReducer,
-  },
+const rootReducer = combineReducers({ UserInfo: UserReducer });
+
+const persistConfig = {
+  key: "root",
+  version: 1,
+  storage,
+};
+const persistedReducer = persistReducer(persistConfig, rootReducer);
+
+export const store = configureStore({
+  reducer: persistedReducer,
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: false,
     }),
 });
 
-export default store;
+export const persistor = persistStore(store);
