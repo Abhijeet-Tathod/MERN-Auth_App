@@ -2,7 +2,7 @@ import UserAuthInfo from "../models/UserAuthInfo.js";
 import bcryptjs from "bcryptjs";
 import jwt from "jsonwebtoken";
 
-const signUp = async (req, res, next) => {
+export const signUp = async (req, res, next) => {
   const { email, password } = req.body;
 
   try {
@@ -24,7 +24,7 @@ const signUp = async (req, res, next) => {
   }
 };
 
-const signIn = async (req, res, next) => {
+export const signIn = async (req, res, next) => {
   const { email, password } = req.body;
 
   try {
@@ -41,11 +41,9 @@ const signIn = async (req, res, next) => {
         .json({ success: false, message: "Invalid credentials" });
 
     const expiryDate = new Date();
-    expiryDate.setHours(expiryDate.getDay() + 1);
+    expiryDate.setDate(expiryDate.getDate() + 2); // Add 2 days to the current date
 
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-      expiresIn: Math.floor(expiryDate / 1000),
-    });
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
     // Create a new object without the password field
     const userWithoutPassword = { ...user._doc };
     delete userWithoutPassword.password;
@@ -67,4 +65,65 @@ const signIn = async (req, res, next) => {
   }
 };
 
-export { signUp, signIn };
+export const google = async (req, res) => {
+  try {
+    const user = await UserAuthInfo.findOne({ email: req.body.email });
+    if (user) {
+      // const
+      const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
+      const expiryDate = new Date();
+      expiryDate.setDate(expiryDate.getDate() + 2); // Add 2 days to the current date
+
+      // Create a new object without the password field
+      const userWithoutPassword = { ...user._doc };
+      delete userWithoutPassword.password;
+
+      res
+        .cookie("access_token", token, {
+          httpOnly: true,
+          secure: false,
+          expires: expiryDate,
+        })
+        .status(200)
+        .json({
+          success: true,
+          message: "Successful",
+          user: userWithoutPassword,
+        });
+    } else {
+      const generatedPassword = `AJ@${Math.random().toString(36).slice(-8)}`;
+      const hashedPassword = bcryptjs.hashSync(generatedPassword, 10);
+      const newUser = new UserAuthInfo({
+        email: req.body.email,
+        password: hashedPassword,
+        fullName: req.body.fullName,
+        profilePic: req.body.profilePic,
+        isEmailVerified: req.body.isEmailVerified,
+      });
+      await newUser.save();
+
+      // Create a new object without the password field
+      const userWithoutPassword = { ...newUser };
+      delete userWithoutPassword.password;
+
+      const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
+      const expiryDate = new Date();
+      expiryDate.setDate(expiryDate.getDate() + 2); // Add 2 days to the current date
+
+      res
+        .cookie("access_token", token, {
+          httpOnly: true,
+          secure: false,
+          expires: expiryDate,
+        })
+        .status(200)
+        .json({
+          success: true,
+          message: "Successful",
+          user: userWithoutPassword,
+        });
+    }
+  } catch (error) {
+    res.status(500).json({ success: false, message: "Internal Server Error" });
+  }
+};
