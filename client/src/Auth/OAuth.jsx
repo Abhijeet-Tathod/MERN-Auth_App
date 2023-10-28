@@ -17,6 +17,7 @@ export default function OAuth() {
   const apiUrl = process.env.REACT_APP_API_URL;
   const dispatch = useDispatch();
 
+  // Continue with Google
   const handleGoogleClick = async () => {
     try {
       const provider = new GoogleAuthProvider();
@@ -37,6 +38,8 @@ export default function OAuth() {
       console.log("Failed to continue with Google", error);
     }
   };
+
+
   const handleGithubClick = async () => {
     try {
       const provider = new GithubAuthProvider();
