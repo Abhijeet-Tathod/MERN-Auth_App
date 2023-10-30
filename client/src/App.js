@@ -10,7 +10,7 @@ import ProfilePage from "./UserProfile/ProfilePage";
 const ColorModeContext = React.createContext({ toggleColorMode: () => {} });
 
 const App = () => {
- const [mode, setMode] = React.useState("light");
+  const [mode, setMode] = React.useState("light");
   const colorMode = React.useMemo(
     () => ({
       toggleColorMode: () => {
