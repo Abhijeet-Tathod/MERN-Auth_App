@@ -3,7 +3,7 @@ import {
   GoogleAuthProvider,
   getAuth,
   signInWithPopup,
-  GithubAuthProvider,
+  // GithubAuthProvider,
 } from "firebase/auth";
 import { app } from "../Config/firebase";
 import Axios from "axios";
@@ -41,15 +41,15 @@ export default function OAuth() {
 
 
   const handleGithubClick = async () => {
-    try {
-      const provider = new GithubAuthProvider();
-      const auth = getAuth(app);
+    // try {
+    //   const provider = new GithubAuthProvider();
+    //   const auth = getAuth(app);
 
-      const result = await signInWithPopup(auth, provider);
-      console.log(result);
-    } catch (error) {
-      console.log("Failed to continue with Github", error);
-    }
+    //   const result = await signInWithPopup(auth, provider);
+    //   console.log(result);
+    // } catch (error) {
+    //   console.log("Failed to continue with Github", error);
+    // }
   };
   return (
     <>
