@@ -74,7 +74,6 @@ const navigate = useNavigate();
         dispatch(signInSuccess(response.data.user));
         formik.resetForm();
         navigate('/')
-        // console.log("Response : ", response);
       } catch (error) {
         dispatch(signInFailure(error));
         console.log("Error", error);
