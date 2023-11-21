@@ -69,7 +69,6 @@ export const google = async (req, res) => {
   try {
     const user = await UserAuthInfo.findOne({ email: req.body.email });
     if (user) {
-      // const
       const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
       const expiryDate = new Date();
       expiryDate.setDate(expiryDate.getDate() + 2); // Add 2 days to the current date
