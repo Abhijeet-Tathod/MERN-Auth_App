@@ -65,6 +65,7 @@ export const signIn = async (req, res, next) => {
   }
 };
 
+// OAuth code
 export const google = async (req, res) => {
   try {
     const user = await UserAuthInfo.findOne({ email: req.body.email });
