@@ -1,4 +1,4 @@
-// store.js
+// Redux Store
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import UserReducer from "./Slices/UserInfoSlice";
 import storage from "redux-persist/lib/storage";
