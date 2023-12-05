@@ -57,6 +57,7 @@ export default function SignUp() {
   // Initialize formik
   const formik = useFormik({
     initialValues: {
+      fullName:"",
       email: "",
       password: "",
     },
@@ -157,6 +158,15 @@ export default function SignUp() {
                   className="flex justify-center"
                   sx={{ width: "330px", margin: "auto" }}
                 >
+                  <Grid
+                    item
+                    xs={12}
+                    sm={12}
+                    paddingBottom={2}
+                    paddingInline={1}
+                  >
+                    {renderTextField("fullName", "Fullname", "fullName")}
+                  </Grid>
                   <Grid
                     item
                     xs={12}

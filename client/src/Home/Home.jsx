@@ -9,7 +9,12 @@ export default function Home() {
   return (
     <>
       <Navbar />
-      <Typography variant="h2">Name : {currentUser.fullName}</Typography>
+      {currentUser ? (
+        <>
+          <Typography variant="h2">Name : {currentUser.fullName}</Typography>
+          <img src={currentUser.profilePic} alt="" />
+        </>
+      ) : null}
     </>
   );
 }

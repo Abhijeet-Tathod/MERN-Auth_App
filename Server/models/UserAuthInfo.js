@@ -20,10 +20,7 @@ const UserAuthInfoSchema = new mongoose.Schema(
     },
     profilePic: {
       type: String,
-      default:'https://www.pngwing.com/en/free-png-zlrqq'
-    },
-    age: {
-      type: String,
+      default: "https://www.pngwing.com/en/free-png-zlrqq",
     },
   },
   { timestamps: true }
