@@ -18,3 +18,8 @@ app.use("/api/auth", authRoute);
 app.listen(PORT, () => {
   console.log("Listing to", PORT);
 });
+
+
+app.get("/", (req, res) => {
+  res.send("Hello");
+})
